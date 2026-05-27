@@ -1,7 +1,7 @@
 import numpy as np
 
-
 from base.Perceptron import Perceptron
+from matplotlib import pyplot as plt
 
 
 def generate(data_type='linear', n_samples=500, noise=0.05, seed=42):
@@ -61,3 +61,34 @@ if __name__ == '__main__':
     print("-" * 38)
     for k, v in results.items():
         print(f"{k:<15} | {v:.2%}")
+
+    data_types = ['linear', 'xor', 'circle']
+
+    fig, axes = plt.subplots(3, 2, figsize=(12, 15))
+
+    for i, dtype in enumerate(data_types):
+        X_train, Y_train, X_test, Y_test = generate(data_type=dtype, n_samples=600, noise=0.05, seed=42)
+
+        ax_train = axes[i, 0]
+
+        ax_train.scatter(X_train[Y_train == 0, 0], X_train[Y_train == 0, 1], color='blue', alpha=0.6, label='Class 0')
+        ax_train.scatter(X_train[Y_train == 1, 0], X_train[Y_train == 1, 1], color='red', marker='x', alpha=0.6,
+                         label='Class 1')
+        ax_train.set_title(f'{dtype.upper()} - Train Split')
+        ax_train.set_xlabel('Feature 1')
+        ax_train.set_ylabel('Feature 2')
+        ax_train.grid(True, linestyle='--', alpha=0.5)
+        ax_train.legend()
+
+        ax_test = axes[i, 1]
+        ax_test.scatter(X_test[Y_test == 0, 0], X_test[Y_test == 0, 1], color='blue', alpha=0.6, label='Class 0')
+        ax_test.scatter(X_test[Y_test == 1, 0], X_test[Y_test == 1, 1], color='red', marker='x', alpha=0.6,
+                        label='Class 1')
+        ax_test.set_title(f'{dtype.upper()} - Test Split')
+        ax_test.set_xlabel('Feature 1')
+        ax_test.set_ylabel('Feature 2')
+        ax_test.grid(True, linestyle='--', alpha=0.5)
+        ax_test.legend()
+
+    plt.tight_layout()
+    plt.show()
